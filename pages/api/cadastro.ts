@@ -6,8 +6,8 @@ import { conectarMongoDB } from '../../middlewares/conectarMongoDB';
 import md5 from 'md5';
 
 
-const endpointCadastro = async (req: NextApiRequest, res: NextApiResponse<RespostaPadraoMsg>) => {
-        try {
+const endpointCadastro = async (req: NextApiRequest, res: NextApiResponse<RespostaPadraoMsg>) => {        
+            if(req.method === 'POST'){
             const usuario = req.body as CadastroRequisicao;
 
             if (!usuario.nome || usuario.nome.length < 2) {
@@ -36,10 +36,10 @@ const endpointCadastro = async (req: NextApiRequest, res: NextApiResponse<Respos
             }
             await UsuarioModel.create(usuarioASerSalvo);
             return res.status(200).json({ msg: 'Usuario criado com sucesso' });
-        } catch (e: any) {
-            console.log(e);
-            return res.status(400).json({ erro: e.toString() });
+        } 
+        {
+        return res.status(405).json({erro: 'Metodo informado não é valido'});
         }
-    });
+    };
 
 export default conectarMongoDB(endpointCadastro);
