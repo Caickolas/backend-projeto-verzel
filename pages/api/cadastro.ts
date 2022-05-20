@@ -23,6 +23,8 @@ const endpointCadastro = async (req: NextApiRequest, res: NextApiResponse<Respos
             if (!usuario.senha || usuario.senha.length < 4) {
                 return res.status(400).json({ erro: 'Senha invalida' });
             }
+
+            
             
             const usuariosComMesmoEmail = await UsuarioModel.find({ email: usuario.email });
             if (usuariosComMesmoEmail && usuariosComMesmoEmail.length > 0) {
@@ -32,7 +34,9 @@ const endpointCadastro = async (req: NextApiRequest, res: NextApiResponse<Respos
             const usuarioASerSalvo = {
                 nome: usuario.nome,
                 email: usuario.email,
-                senha: md5(usuario.senha)
+                senha: md5(usuario.senha),
+                role: usuario.role
+
             }
             await UsuarioModel.create(usuarioASerSalvo);
             return res.status(200).json({ msg: 'Usuario criado com sucesso' });

@@ -24,6 +24,7 @@ const endpointLogin = async ( req: NextApiRequest, res: NextApiResponse<Resposta
         return res.status(200).json({
             nome: usuarioEncontrado.nome,
             email: usuarioEncontrado.email,
+            role: usuarioEncontrado.role,
             token
         });
     }
