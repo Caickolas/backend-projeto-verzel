@@ -5,6 +5,7 @@ import {validarTokenJWT} from '../../middlewares/validarTokenJWT'
 import {UsuarioModel} from '../../models/UsuarioModel'
 import {ModuloModel} from '../../models/ModuloModel'
 import {AulaModel} from '../../models/AulaModel'
+import modulo from "./modulo";
 
 
 const endpointAula = async (req: any, res: NextApiResponse<RespostaPadraoMsg>) => {
@@ -13,6 +14,9 @@ const endpointAula = async (req: any, res: NextApiResponse<RespostaPadraoMsg>) =
 
             const {userId} = req.query;
             const usuario = await UsuarioModel.findById(userId)
+
+            const {Id} = req.query;
+            const modulo = await ModuloModel.findById(Id)
 
             if(!usuario){
                 return res.status(400).json({ erro: 'usuario não encontrado' }) 
@@ -23,7 +27,7 @@ const endpointAula = async (req: any, res: NextApiResponse<RespostaPadraoMsg>) =
             }
 
 
-            const {nome, dataDaAula, nomeModulo} = req?.body;
+            const {nome, dataDaAula} = req?.body;
             
 
             if (!req || !req.body){
@@ -44,13 +48,15 @@ const endpointAula = async (req: any, res: NextApiResponse<RespostaPadraoMsg>) =
             
             const Aula = { 
                 idUsuario : usuario._id,
-                nomeModulo,
+                Modulo : modulo._id,
                 nome,
                 dataDaAula
             };
         
                 
                 await AulaModel.create(Aula);
+                modulo.aulas++
+                await ModuloModel.findByIdAndUpdate({_id: modulo._id}, modulo)
                 return res.status(200).json({ msg: 'Aula cadastrada com sucesso!' })
             
             }
