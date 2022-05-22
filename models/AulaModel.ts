@@ -2,7 +2,7 @@ import mongoose, { Schema } from 'mongoose';
 
 const AulaSchema = new Schema({
     idUsuario: { type: String, required: true },
-    nomeModulo: { type: String, required: true },
+    idModulo: { type: String, required: true },
     nome: { type: String, required: true },
     dataDaAula: { type: String, required: true },
     

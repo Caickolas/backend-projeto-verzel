@@ -10,20 +10,23 @@ import modulo from "./modulo";
 
 const endpointAula = async (req: any, res: NextApiResponse<RespostaPadraoMsg>) => {
     try{        
-            if(req.method === 'POST'){
+            if(req.method === 'PUT'){
 
-            const {userId} = req.query;
+            const {userId, id} = req.query;
             const usuario = await UsuarioModel.findById(userId)
-
-            const {Id} = req.query;
-            const modulo = await ModuloModel.findById(Id)
-
+            
             if(!usuario){
-                return res.status(400).json({ erro: 'usuario não encontrado' }) 
+                return res.status(400).json({ erro: 'Usuario não encontrado' }) 
             }
-
+            
             if(usuario.role !== 'admin' ){
                 return res.status(401).json({ erro: 'Você não tem permissão' })
+            }
+            
+            const moduloASerAdicionado = await ModuloModel.findById(id)
+
+            if(!moduloASerAdicionado){
+                return res.status(400).json({ erro: 'Modulo não encontrado' })
             }
 
 
@@ -48,15 +51,15 @@ const endpointAula = async (req: any, res: NextApiResponse<RespostaPadraoMsg>) =
             
             const Aula = { 
                 idUsuario : usuario._id,
-                Modulo : modulo._id,
+                idModulo : moduloASerAdicionado._id,
                 nome,
                 dataDaAula
             };
         
                 
                 await AulaModel.create(Aula);
-                modulo.aulas++
-                await ModuloModel.findByIdAndUpdate({_id: modulo._id}, modulo)
+                moduloASerAdicionado.aulas++
+                await ModuloModel.findByIdAndUpdate({_id: moduloASerAdicionado._id}, moduloASerAdicionado)
                 return res.status(200).json({ msg: 'Aula cadastrada com sucesso!' })
             
             }
