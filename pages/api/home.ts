@@ -12,15 +12,13 @@ import { ModuloModel } from '../../models/ModuloModel';
 const homeEndpoint = async (req : NextApiRequest, res : NextApiResponse<RespostaPadraoMsg | any>) => {
     try{
         if(req.method === 'GET'){
-            if(req?.query?.id){
-                const modulo = await ModuloModel.findById(req?.query?.id)
-                
-                if(!modulo){
-                    res.status(400).json({ erro: 'Modulo nao encontrado' })
-                }
-                
+            if(req?.query?.id){                
                 const aulas = await AulaModel.find({idModulo : req?.query?.id})
                 .sort({nome : 1})
+                if(!aulas){
+                    res.status(400).json({erro : "Modulo Não encontrado"})
+                }
+
 
                 return res.status(200).json(aulas)
 
