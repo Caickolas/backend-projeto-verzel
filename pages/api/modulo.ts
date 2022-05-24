@@ -6,6 +6,7 @@ import {UsuarioModel} from '../../models/UsuarioModel'
 import {ModuloModel} from '../../models/ModuloModel'
 import nc from "next-connect";
 import { AulaModel } from "../../models/AulaModel";
+import { politicaCORS } from "../../middlewares/politicaCORS";
 
 
 const handler = nc() 
@@ -87,4 +88,4 @@ const handler = nc()
     });
     
     
-export default (validarTokenJWT(conectarMongoDB(handler)));
+export default politicaCORS(validarTokenJWT(conectarMongoDB(handler)));

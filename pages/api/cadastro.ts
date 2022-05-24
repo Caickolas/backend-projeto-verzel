@@ -4,6 +4,7 @@ import type { CadastroRequisicao } from '../../types/CadastroRequisicao';
 import { UsuarioModel } from '../../models/UsuarioModel';
 import { conectarMongoDB } from '../../middlewares/conectarMongoDB';
 import md5 from 'md5';
+import { politicaCORS } from '../../middlewares/politicaCORS';
 
 
 const endpointCadastro = async (req: NextApiRequest, res: NextApiResponse<RespostaPadraoMsg>) => {        
@@ -46,4 +47,4 @@ const endpointCadastro = async (req: NextApiRequest, res: NextApiResponse<Respos
         }
     };
 
-export default conectarMongoDB(endpointCadastro);
+export default politicaCORS(conectarMongoDB(endpointCadastro));

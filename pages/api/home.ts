@@ -3,6 +3,7 @@ import type { RespostaPadraoMsg } from '../../types/RespostaPadraoMsg';
 import { conectarMongoDB } from '../../middlewares/conectarMongoDB';
 import { AulaModel } from "../../models/AulaModel";
 import { ModuloModel } from '../../models/ModuloModel';
+import { politicaCORS } from "../../middlewares/politicaCORS";
 
 
 
@@ -38,4 +39,4 @@ const homeEndpoint = async (req : NextApiRequest, res : NextApiResponse<Resposta
 };
 
 
-export default (conectarMongoDB(homeEndpoint));
+export default politicaCORS(conectarMongoDB(homeEndpoint));

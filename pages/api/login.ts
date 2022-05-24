@@ -4,6 +4,7 @@ import md5 from 'md5';
 import {UsuarioModel} from '../../models/UsuarioModel';
 import type {RespostaPadraoMsg}  from '../../types/RespostaPadraoMsg';
 import { conectarMongoDB } from '../../middlewares/conectarMongoDB';
+import { politicaCORS } from '../../middlewares/politicaCORS';
 
 const endpointLogin = async ( req: NextApiRequest, res: NextApiResponse<RespostaPadraoMsg | any>) => {    
 
@@ -32,4 +33,4 @@ const endpointLogin = async ( req: NextApiRequest, res: NextApiResponse<Resposta
 return res.status(405).json({erro: 'Metodo informado não é valido'});
 };
 
-export default conectarMongoDB(endpointLogin);
+export default politicaCORS(conectarMongoDB(endpointLogin));
