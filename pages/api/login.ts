@@ -12,25 +12,28 @@ const endpointLogin = async ( req: NextApiRequest, res: NextApiResponse<Resposta
     if (!CHAVE_JWT){
     return res.status(500).json({erro : 'ENV Jwt nao informada'});
     }
-        
-    if(req.method === 'POST'){
-        const {login, senha} = req.body;
+    try{
+        if(req.method === 'POST'){
+            const {login, senha} = req.body;
 
-    const usuariosEncontrados = await UsuarioModel.find({email : login, senha : md5(senha)})
-    if(usuariosEncontrados && usuariosEncontrados.length > 0){
-        const usuarioEncontrado = usuariosEncontrados[0]
+        const usuariosEncontrados = await UsuarioModel.find({email : login, senha : md5(senha)})
+        if(usuariosEncontrados && usuariosEncontrados.length > 0){
+            const usuarioEncontrado = usuariosEncontrados[0]
 
 
-        const token = jwt.sign({_id : usuarioEncontrado._id}, CHAVE_JWT);
-        return res.status(200).json({
-            nome: usuarioEncontrado.nome,
-            email: usuarioEncontrado.email,
-            role: usuarioEncontrado.role,
-            token
-        });
+            const token = jwt.sign({_id : usuarioEncontrado._id}, CHAVE_JWT);
+            return res.status(200).json({
+                nome: usuarioEncontrado.nome,
+                email: usuarioEncontrado.email,
+                role: usuarioEncontrado.role,
+                token
+            });
+        }
     }
-}
-return res.status(405).json({erro: 'Metodo informado não é valido'});
+    //return res.status(405).json({erro: 'Metodo informado não é valido'});
+    }catch(e){
+        console.log(e)
+    }
 };
 
 export default politicaCORS(conectarMongoDB(endpointLogin));
