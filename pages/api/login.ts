@@ -29,8 +29,9 @@ const endpointLogin = async ( req: NextApiRequest, res: NextApiResponse<Resposta
                 token
             });
         }
+        return res.status(400).json({erro: 'Usuario não encontrado'});
     }
-    //return res.status(405).json({erro: 'Metodo informado não é valido'});
+    return res.status(405).json({erro: 'Metodo informado não é valido'});
     }catch(e){
         console.log(e)
     }
