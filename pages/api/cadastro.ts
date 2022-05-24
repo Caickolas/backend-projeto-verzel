@@ -11,8 +11,8 @@ const endpointCadastro = async (req: NextApiRequest, res: NextApiResponse<Respos
             if(req.method === 'POST'){
             const usuario = req.body as CadastroRequisicao;
 
-            if (!usuario.nome  || usuario.nome.length < 2) {
-                return res.status(400).json({ erro: 'Nome invalido' });
+            if (!usuario.nome ) {
+                return res.status(400).json({ erro: 'informe um nome valido' });
             }
 
             if (!usuario.email || usuario.email.length < 5
