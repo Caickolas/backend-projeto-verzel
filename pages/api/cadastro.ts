@@ -9,33 +9,34 @@ import { politicaCORS } from '../../middlewares/politicaCORS';
 
 const endpointCadastro = async (req: NextApiRequest, res: NextApiResponse<RespostaPadraoMsg>) => {        
             if(req.method === 'POST'){
-            const {nome, email, senha} = req.body;
+            const usuario = req.body as CadastroRequisicao;
 
-            if (!nome ) {
+            if (!usuario.nome) {
                 return res.status(400).json({ erro: 'informe um nome valido' });
             }
 
-            if (!email || email.length < 5
-                || !email.includes('@')
-                || !email.includes('.')) {
+            if (!usuario.email || usuario.email.length < 5
+                || !usuario.email.includes('@')
+                || !usuario.email.includes('.')) {
                 return res.status(400).json({ erro: 'Email invalido' });
             }
 
-            if (!senha || senha.length < 4) {
+            if (!usuario.senha || usuario.senha.length < 4) {
                 return res.status(400).json({ erro: 'Senha invalida' });
             }
 
             
             
-            const usuariosComMesmoEmail = await UsuarioModel.find({ email: email });
+            const usuariosComMesmoEmail = await UsuarioModel.find({ email: usuario.email });
             if (usuariosComMesmoEmail && usuariosComMesmoEmail.length > 0) {
                 return res.status(400).json({ erro: 'Ja existe uma conta com o email informado' });
             }
 
             const usuarioASerSalvo = {
-                nome: nome,
-                email: email,
-                senha: md5(senha),               
+                nome: usuario.nome,
+                email: usuario.email,
+                senha: md5(usuario.senha),
+                role: usuario.role
             }
             await UsuarioModel.create(usuarioASerSalvo);
             return res.status(200).json({ msg: 'Usuario criado com sucesso' });
